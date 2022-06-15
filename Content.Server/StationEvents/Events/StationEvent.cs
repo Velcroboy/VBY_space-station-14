@@ -1,5 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.Chat;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
@@ -140,13 +141,13 @@ namespace Content.Server.StationEvents.Events
 
             if (StartAnnouncement != null)
             {
-                var chatManager = IoCManager.Resolve<IChatManager>();
-                chatManager.DispatchStationAnnouncement(StartAnnouncement, playDefaultSound: false, colorOverride: Color.Gold);
+                var chatSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ChatSystem>();
+                chatSystem.DispatchGlobalStationAnnouncement(StartAnnouncement, playDefaultSound: false, colorOverride: Color.Gold);
             }
 
             if (StartAudio != null)
             {
-                SoundSystem.Play(Filter.Broadcast(), StartAudio.GetSound(), AudioParams);
+                SoundSystem.Play(StartAudio.GetSound(), Filter.Broadcast(), AudioParams);
             }
 
             Announced = true;
@@ -163,13 +164,13 @@ namespace Content.Server.StationEvents.Events
 
             if (EndAnnouncement != null)
             {
-                var chatManager = IoCManager.Resolve<IChatManager>();
-                chatManager.DispatchStationAnnouncement(EndAnnouncement, playDefaultSound: false, colorOverride: Color.Gold);
+                var chatSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ChatSystem>();
+                chatSystem.DispatchGlobalStationAnnouncement(EndAnnouncement, playDefaultSound: false, colorOverride: Color.Gold);
             }
 
             if (EndAudio != null)
             {
-                SoundSystem.Play(Filter.Broadcast(), EndAudio.GetSound(), AudioParams);
+                SoundSystem.Play(EndAudio.GetSound(), Filter.Broadcast(), AudioParams);
             }
 
             Started = false;
